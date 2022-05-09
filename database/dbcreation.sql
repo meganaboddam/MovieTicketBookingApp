@@ -45,7 +45,7 @@ Create Table THEATER_SEATS (
 
 Create Table SEATS_FOR_SHOW (
   show_seat_id int Primary Key,
-  available boolean,
+  available bit,
   price double,
   seat_id int ForeignKey References THEATER_SEATS(seat_id),
   show_id int ForeignKey References SHOWS(show_id),
@@ -72,23 +72,27 @@ Create Table BOOKINGS (
 
 Create Table SHOWS (
   show_id int Primary Key,
-  start_time datetime,
-  end_time datetime,
+  show_date date,
+  start_time time,
+  end_time time,
   available_seats int,
   theater_room_id int ForeignKey References THEATER_ROOMS(room_id),
   movie_id int ForeignKey References MOVIES(movie_id)
 );
 
+-- image and trailer should be varbinary, 
+-- but we did not have time to implement yet,
+-- so we have a placeholder for now.
 Create Table MOVIES (
   movie_id int Primary Key,
   name varchar,
   description varchar,
-  image varbinary,
-  trailer varbinary,
+  image varchar,
+  trailer varchar,
   genre varchar,
   audience_rating_level varchar,
   language varchar,
-  duration timestamp,
+  duration time,
   imdb_rating double,
   rotten_tomatoes_rating int
 );
