@@ -1,36 +1,28 @@
+__author__ = 'Sahana Pandurangi Raghavendra'
+__author__ = 'Megana Reddy Boddam'
+
 import unittest
 from food_booking_lib import *
 import unittest
 
-url_list_of_food = ""
-headers_list_of_food = {'Content-type': 'application/json', 'Accept': 'application/json',
-                        'x-api-key': ''}
-headers_no_apikey_list_of_food = {'Content-type': 'application/json', 'Accept': 'application/json'}
+# urls / API endpoints used by food booking lambda service
+url_list_of_pickup_times = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/pickuptime"
+url_list_of_food = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listoffood"
 
-url_post_selected_food = ""
-headers_post_selected_food = {'Content-type': 'application/json', 'Accept': 'application/json',
-                              'x-api-key': ''}
-headers_no_apikey_post_selected_food = {'Content-type': 'application/json', 'Accept': 'application/json'}
+# headers
+headers_with_apikey = {'Content-type': 'application/json', 'Accept': 'application/json',
+                        'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+headers_no_apikey = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
-url_list_of_pickup_times = ""
-headers_list_of_pickup_times = {'Content-type': 'application/json', 'Accept': 'application/json',
-                                'x-api-key': ''}
-headers_no_apikey_list_of_pickup_times = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-url_post_selected_pickup_time = ""
-headers_post_selected_pickup_time = {'Content-type': 'application/json', 'Accept': 'application/json',
-                                     'x-api-key': ''}
-headers_no_apikey_post_selected_pickup_time = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-
-class TicketBookingTestcases(unittest.TestCase):
+# Testcases that test all the endpoints pertaining to food booking lambda interfaces.
+class FoodBookingTestcases(unittest.TestCase):
     def get_list_of_food_positive_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.get_food(url_list_of_food, {'user_id': 1, 'theater_id': 1},
-                                                          headers_list_of_food)
-        print(status_code)
+        status_code, response_json = general_obj.get_list_of_food(url_list_of_food, {'user_id': 1, 'theater_id': 1},
+                                                          headers_with_apikey)
+        print("status code is: " + str(status_code))
         self.assertEqual(status_code, 200)
-        print(str(response_json))
+        print("the response is: " + str(response_json))
         print("Checking First Food")
         actual_val = response_json['food'][0]['food_name']
         self.assertEqual(str(actual_val), "Butter Popcorn (Small)", "ERR: Failed to get appropriate food")
@@ -41,21 +33,22 @@ class TicketBookingTestcases(unittest.TestCase):
         actual_val = response_json['food'][2]['food_name']
         self.assertEqual(str(actual_val), "Butter Popcorn (Large)", "ERR: Failed to get appropriate food")
 
+
     def get_list_of_food_negative_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.get_food(url_list_of_food, {'user_id': 1, 'theater_id': 1},
-                                                          headers_no_apikey_list_of_food)
-        print(status_code)
-        self.assertEqual(status_code, 483)
+        status_code, response_json = general_obj.get_list_of_food(url_list_of_food, {'user_id': 1, 'theater_id': 1},
+                                                          headers_no_apikey)
+        print("status code is: " + str(status_code))
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_food_positive_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.post_food(url_post_selected_food,
+        status_code, response_json = general_obj.post_food(url_list_of_food,
                                                            {'user_id': 1, 'booking_id': 1, 'food_id': 1, 'quantity': 1},
-                                                           headers_post_selected_food)
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -68,10 +61,10 @@ class TicketBookingTestcases(unittest.TestCase):
 
     def post_selected_food_negative_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.post_food(url_post_selected_food, None,
-                                                           headers_no_apikey_post_selected_food)
+        status_code, response_json = general_obj.post_food(url_list_of_food, None,
+                                                           headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
@@ -80,7 +73,7 @@ class TicketBookingTestcases(unittest.TestCase):
         general_obj = FoodBooking()
         status_code, response_json = general_obj.get_pickup_times(url_list_of_pickup_times,
                                                                   {'user_id': 1, 'booking_id': 1},
-                                                                  headers_list_of_pickup_times)
+                                                                  headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -98,19 +91,19 @@ class TicketBookingTestcases(unittest.TestCase):
         general_obj = FoodBooking()
         status_code, response_json = general_obj.get_pickup_times(url_list_of_pickup_times,
                                                                   {'user_id': 1, 'booking_id': 1},
-                                                                  headers_no_apikey_list_of_pickup_times)
+                                                                  headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_pickup_time_positive_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.post_pickup_times(url_post_selected_pickup_time,
+        status_code, response_json = general_obj.post_pickup_times(url_list_of_pickup_times,
                                                                    {'user_id': 1, 'booking_id': 1,
                                                                     'pickup_time': '12:00:00'},
-                                                                   headers_post_selected_theater)
+                                                                   headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -119,14 +112,12 @@ class TicketBookingTestcases(unittest.TestCase):
 
     def post_selected_pickup_time_negative_test_one(self):
         general_obj = FoodBooking()
-        status_code, response_json = general_obj.post_pickup_times(url_post_selected_pickup_time, None,
-                                                                   headers_no_apikey_post_selected_pickup_time)
+        status_code, response_json = general_obj.post_pickup_times(url_list_of_pickup_times, None,
+                                                                   headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
 
-if __name__ == '__main__':
-    unittest.main()

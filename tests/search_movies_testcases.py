@@ -1,42 +1,23 @@
+__author__ = 'Sahana Pandurangi Raghavendra'
+__author__ = 'Megana Reddy Boddam'
+
 import unittest
 from search_movies_lib import *
-import unittest
 
 url_list_of_cities = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofcities"
-headers_list_of_cities = {'Content-type': 'application/json', 'Accept': 'application/json',
-                          'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
-headers_no_apikey_list_of_cities = {'Content-type': 'application/json', 'Accept': 'application/json'}
+url_list_of_theaters = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listoftheaters"
+url_list_of_movies = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofmovies"
 
-url_post_selected_city = ""
-headers_post_selected_city = {'Content-type': 'application/json', 'Accept': 'application/json',
-                              'x-api-key': ''}
-headers_no_apikey_post_selected_city = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-url_list_of_theaters = ""
-headers_list_of_theaters = {'Content-type': 'application/json', 'Accept': 'application/json',
-                            'x-api-key': ''}
-headers_no_apikey_list_of_theaters = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-url_post_selected_theater = ""
-headers_post_selected_theater = {'Content-type': 'application/json', 'Accept': 'application/json',
-                                 'x-api-key': ''}
-headers_no_apikey_post_selected_theater = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-url_list_of_movies = ""
-headers_list_of_movies = {'Content-type': 'application/json', 'Accept': 'application/json',
-                          'x-api-key': ''}
-headers_no_apikey_list_of_movies = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
-url_post_selected_movie = ""
-headers_post_selected_movie = {'Content-type': 'application/json', 'Accept': 'application/json',
-                               'x-api-key': ''}
-headers_no_apikey_post_selected_movie = {'Content-type': 'application/json', 'Accept': 'application/json'}
+headers_with_apikey = {'Content-type': 'application/json', 'Accept': 'application/json',
+                       'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+headers_no_apikey = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
 
+# Testcases that test all the endpoints pertaining to search movies lambda interface.
 class SearchMoviesTestcases(unittest.TestCase):
     def get_list_of_cities_positive_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.get_cities(url_list_of_cities, {'user_id': 1}, headers_list_of_cities)
+        status_code, response_json = general_obj.get_cities(url_list_of_cities, {'user_id': 1}, headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -53,9 +34,9 @@ class SearchMoviesTestcases(unittest.TestCase):
     def get_list_of_cities_negative_test_one(self):
         general_obj = SearchMovies()
         status_code, response_json = general_obj.get_cities(url_list_of_cities, {'user_id': 1},
-                                                            headers_no_apikey_list_of_cities)
+                                                            headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
@@ -63,7 +44,7 @@ class SearchMoviesTestcases(unittest.TestCase):
     def get_list_of_cities_negative_test_two(self):
         general_obj = SearchMovies()
         status_code, response_json = general_obj.get_cities(url_list_of_cities, {'user_id': None},
-                                                            headers_list_of_cities)
+                                                            headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -73,7 +54,7 @@ class SearchMoviesTestcases(unittest.TestCase):
     def get_list_of_cities_negative_test_three(self):
         general_obj = SearchMovies()
         status_code, response_json = general_obj.get_cities(url_list_of_cities, {'user_id': 99999999},
-                                                            headers_list_of_cities)
+                                                            headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -82,8 +63,8 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def post_selected_city_positive_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_city(url_post_selected_city, {'user_id': 1, 'city_code': 1},
-                                                           headers_post_selected_city)
+        status_code, response_json = general_obj.post_city(url_list_of_cities, {'user_id': 1, 'city_code': 1},
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -92,18 +73,18 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def post_selected_city_negative_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_city(url_post_selected_city, {'user_id': 1, 'city_code': 1},
-                                                           headers_no_apikey_post_selected_city)
+        status_code, response_json = general_obj.post_city(url_list_of_cities, {'user_id': 1, 'city_code': 70000000},
+                                                           headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
     def get_list_of_theaters_positive_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.get_theater(url_list_of_theaters, {'user_id': 1, 'city_code': 1},
-                                                             headers_list_of_theaters)
+        status_code, response_json = general_obj.get_theaters(url_list_of_theaters, {'user_id': 1, 'city_code': 1},
+                                                              headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -119,19 +100,29 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def get_list_of_theaters_negative_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.get_theater(url_list_of_theaters, {'user_id': 1, 'city_code': 1},
-                                                             headers_no_apikey_list_of_theaters)
+        status_code, response_json = general_obj.get_theaters(url_list_of_theaters, {'user_id': 1, 'city_code': 1},
+                                                              headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
+    def get_list_of_theaters_invalid_parameters(self):
+        general_obj = SearchMovies()
+        status_code, response_json = general_obj.get_theaters(url_list_of_theaters, {'user_id': 1, 'city_code': 'AB56'},
+                                                              headers_with_apikey)
+        print(status_code)
+        self.assertEqual(status_code, 200)
+        print(str(response_json))
+        actual_val = response_json['message']
+        self.assertEqual(str(actual_val), "Invalid User Input", "ERR: Failed to get the appropriate negative response")
+
     def post_selected_theater_positive_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_theater(url_post_selected_theater,
+        status_code, response_json = general_obj.post_theater(url_list_of_theaters,
                                                               {'user_id': 1, 'theater_id': 1},
-                                                              headers_post_selected_theater)
+                                                              headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -140,11 +131,11 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def post_selected_theater_negative_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_theater(url_post_selected_city,
-                                                              {'user_id': 1, 'theater_id': 1},
-                                                              headers_no_apikey_post_selected_theater)
+        status_code, response_json = general_obj.post_theater(url_list_of_theaters,
+                                                              {'user_id': 1, 'theater_id': "6666666U"},
+                                                              headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
@@ -153,7 +144,7 @@ class SearchMoviesTestcases(unittest.TestCase):
         general_obj = SearchMovies()
         status_code, response_json = general_obj.get_movies(url_list_of_movies,
                                                             {'user_id': 1, 'theater_id': 1},
-                                                            headers_list_of_movies)
+                                                            headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -166,20 +157,20 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def get_list_of_movies_negative_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.get_movie(url_list_of_movies,
-                                                           {'user_id': 1, 'theater_id': 1},
-                                                           headers_no_apikey_list_of_movies)
+        status_code, response_json = general_obj.get_movies(url_list_of_movies,
+                                                            {'user_id': 1, 'theater_id': 1},
+                                                            headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_movie_positive_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_movie(url_post_selected_movie,
+        status_code, response_json = general_obj.post_movie(url_list_of_movies,
                                                             {'user_id': 1, 'movie_id': 1},
-                                                            headers_post_selected_movie)
+                                                            headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -188,15 +179,11 @@ class SearchMoviesTestcases(unittest.TestCase):
 
     def post_selected_movie_negative_test_one(self):
         general_obj = SearchMovies()
-        status_code, response_json = general_obj.post_city(url_post_selected_movie,
-                                                           {'user_id': 1, 'movie_id': 1},
-                                                           headers_no_apikey_post_selected_movie)
+        status_code, response_json = general_obj.post_movie(url_list_of_movies,
+                                                            {'user_id': 1, 'movie_id': 1},
+                                                            headers_no_apikey)
         print(status_code)
-        self.assertEqual(status_code, 483)
+        self.assertEqual(status_code, 403)
         print(str(response_json))
         actual_val = response_json['message']
         self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
-
-
-if __name__ == '__main__':
-    unittest.main()
