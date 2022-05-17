@@ -10,16 +10,14 @@ url_list_of_times = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod
 url_list_of_seats = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/prod/listofshowseats"
 
 headers_with_apikey = {'Content-type': 'application/json', 'Accept': 'application/json',
-                       'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
-headers_no_apikey = {'Content-type': 'application/json', 'Accept': 'application/json'}
-
+                         'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
 
 # Testcases that test all the endpoints pertaining to ticket booking lambda interface.
 class TicketBookingTestcases(unittest.TestCase):
     def get_list_of_dates_positive_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.get_show_dates(url_list_of_dates, {'user_id': 1, 'movie_id': 1},
-                                                                headers_with_apikey)
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -35,19 +33,19 @@ class TicketBookingTestcases(unittest.TestCase):
 
     def get_list_of_dates_negative_test_one(self):
         general_obj = TicketBooking()
-        status_code, response_json = general_obj.get_show_dates(url_list_of_dates, {'user_id': 1, 'movie_id': 1},
-                                                                headers_no_apikey)
+        status_code, response_json = general_obj.get_show_dates(url_list_of_dates, {'user_id': 1, 'movie_id': "hello"},
+                                                           headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Inputs ", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_date_positive_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.post_show_date(url_list_of_dates,
-                                                                {'user_id': 1, 'movie_id': 1, 'date': '2022-06-01'},
-                                                                headers_with_apikey)
+                                                           {'user_id': 1, 'movie_id': 1, 'date': '2022-06-01'},
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -57,18 +55,18 @@ class TicketBookingTestcases(unittest.TestCase):
     def post_selected_date_negative_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.post_show_date(url_list_of_dates, None,
-                                                                headers_no_apikey)
+                                                           headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "No User Input", "ERR: Failed to get the appropriate negative response")
 
     def get_list_of_times_positive_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.get_show_times(url_list_of_times,
-                                                                {'user_id': 1, 'movie_id': 1, 'date': '2022-06-01'},
-                                                                headers_with_apikey)
+                                                           {'user_id': 1, 'movie_id': 1, 'date': '2022-06-01'},
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -84,19 +82,19 @@ class TicketBookingTestcases(unittest.TestCase):
 
     def get_list_of_times_negative_test_one(self):
         general_obj = TicketBooking()
-        status_code, response_json = general_obj.get_show_times(url_list_of_times, None, headers_no_apikey)
+        status_code, response_json = general_obj.get_show_times(url_list_of_times, None, headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "No User Input", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_time_positive_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.post_show_times(url_list_of_times,
-                                                                 {'user_id': 1, 'movie_id': 1,
-                                                                  'date': '2022-06-01', 'time': '12:30:00'},
-                                                                 headers_with_apikey)
+                                                           {'user_id': 1, 'movie_id': 1,
+                                                            'date': '2022-06-01', 'time': '12:30:00'},
+                                                           headers_with_apikey)
         print(status_code)
         self.assertEqual(status_code, 200)
         print(str(response_json))
@@ -109,13 +107,13 @@ class TicketBookingTestcases(unittest.TestCase):
 
     def post_selected_time_negative_test_one(self):
         general_obj = TicketBooking()
-        status_code, response_json = general_obj.post_show_times(url_list_of_times, None,
-                                                                 headers_no_apikey)
+        status_code, response_json = general_obj.post_show_times(url_list_of_times, {'user_id': 1, 'movie_id': 1},
+                                                           headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Missing User Input", "ERR: Failed to get the appropriate negative response")
 
     def get_list_of_seats_positive_test_one(self):
         general_obj = TicketBooking()
@@ -139,13 +137,13 @@ class TicketBookingTestcases(unittest.TestCase):
     def get_list_of_seats_negative_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.get_seats(url_list_of_seats,
-                                                           {'user_id': 1, 'show_id': 1},
-                                                           headers_no_apikey)
+                                                           {'user_id': 1, 'show_id': "hello"},
+                                                           headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Input", "ERR: Failed to get the appropriate negative response")
 
     def post_selected_seats_positive_test_one(self):
         general_obj = TicketBooking()
@@ -161,10 +159,10 @@ class TicketBookingTestcases(unittest.TestCase):
     def post_selected_seats_negative_test_one(self):
         general_obj = TicketBooking()
         status_code, response_json = general_obj.post_seats(url_list_of_seats,
-                                                            {'user_id': 1, 'seat_id': 1},
-                                                            headers_no_apikey)
+                                                            {'user_id': 1, 'seat_id': "hello"},
+                                                            headers_with_apikey)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Input", "ERR: Failed to get the appropriate negative response")

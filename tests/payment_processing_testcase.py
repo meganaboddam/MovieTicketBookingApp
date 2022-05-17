@@ -10,7 +10,6 @@ url_list_of_tickets = "https://9qhi5gewy6.execute-api.us-east-1.amazonaws.com/pr
 
 headers_with_api_key = {'Content-type': 'application/json', 'Accept': 'application/json',
                         'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
-headers_no_apikey = {'Content-type': 'application/json', 'Accept': 'application/json'}
 
 
 # Testcases that test all the endpoints pertaining to payment processing lambda interfaces.
@@ -28,13 +27,13 @@ class PaymentProcessingTestcases(unittest.TestCase):
 
     def post_booking_cost_negative_test_one(self):
         general_obj = PaymentProcessing()
-        status_code, response_json = general_obj.post_booking_cost(url_booking_cost, {'booking_id': 1},
-                                                                   headers_no_apikey)
+        status_code, response_json = general_obj.post_booking_cost(url_booking_cost, {'booking_id': "abc"},
+                                                                   headers_with_api_key)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Inputs", "ERR: Failed to get the appropriate negative response")
 
     def get_booking_cost_positive_test_one(self):
         general_obj = PaymentProcessing()
@@ -48,13 +47,13 @@ class PaymentProcessingTestcases(unittest.TestCase):
 
     def get_booking_cost_negative_test_one(self):
         general_obj = PaymentProcessing()
-        status_code, response_json = general_obj.get_booking_cost(url_booking_cost, {'booking_id': 1},
-                                                                  headers_no_apikey)
+        status_code, response_json = general_obj.get_booking_cost(url_booking_cost, {'booking_id': "abc"},
+                                                                  headers_with_api_key)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Inputs", "ERR: Failed to get the appropriate negative response")
 
     def get_list_of_tickets_positive_test_one(self):
         general_obj = PaymentProcessing()
@@ -106,10 +105,10 @@ class PaymentProcessingTestcases(unittest.TestCase):
 
     def get_list_of_tickets_negative_test_one(self):
         general_obj = PaymentProcessing()
-        status_code, response_json = general_obj.get_tickets(url_list_of_tickets, {'booking_id': 1},
-                                                             headers_no_apikey)
+        status_code, response_json = general_obj.get_tickets(url_list_of_tickets, {'booking_id': "abc"},
+                                                             headers_with_api_key)
         print(status_code)
-        self.assertEqual(status_code, 403)
+        self.assertEqual(status_code, 200)
         print(str(response_json))
         actual_val = response_json['message']
-        self.assertEqual(str(actual_val), "Forbidden", "ERR: Failed to get the appropriate negative response")
+        self.assertEqual(str(actual_val), "Invalid User Inputs", "ERR: Failed to get the appropriate negative response")
