@@ -1,16 +1,18 @@
-__author__ = 'Sahana Pandurangi Raghavendra'
-__author__ = 'Megana Reddy Boddam'
+__author__ = 'Sahana Pandurangi Raghavendra', 'Megana Reddy Boddam'
 
 # importing api methods file that contain the GET and POST library code
-from api_methods_lib import *
+from requests import post
 
-# Class that implements all libraries to test the API ends pertaining Foodbooking lambda service
+from apimethodslib import *
+
+
+# Class that implements all libraries to test the API ends pertaining Food booking lambda service
 class FoodBooking:
 
     def __init__(self):
-        self.methods_api = Apimethods()
+        self.methods_api = APIMethodsLib()
 
-    # Function to test the API that queries the database for a list avaliable
+    # Function to test the API that queries the database for a list available
     # food items for consumption during movie
     # input : url / api endpoint to which request has to be sent
     # params: query string parameters that has to be sent with the API request
@@ -29,7 +31,7 @@ class FoodBooking:
     # headers: headers that need to be added for that API
     def post_food(self, request_url, params=None, headers=None):
         print("Posting the selected food and beverages")
-        response = self.methods_api.post(request_url, params=params, headers=headers)
+        response = post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         print(response_json)
@@ -54,7 +56,7 @@ class FoodBooking:
     # headers: headers that need to be added for that API
     def post_pickup_times(self, request_url, params=None, headers=None):
         print("Posting the selected time for picking up food")
-        response = self.methods_api.post(request_url, params=params, headers=headers)
+        response = post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         print(response_json)

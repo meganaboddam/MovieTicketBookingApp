@@ -1,5 +1,4 @@
-__author__ = 'Sahana Pandurangi Raghavendra'
-__author__ = 'Megana Reddy Boddam'
+__author__ = 'Sahana Pandurangi Raghavendra', 'Megana Reddy Boddam'
 
 """
 This is a library file that implements the post and get methods that are used for API requests
@@ -12,11 +11,13 @@ from urllib import *
 import json
 import logging
 
-default_headers = {'Content-type': 'application/json', 'Accept': 'application/json','x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
+default_headers = {'Content-type': 'application/json', 'Accept': 'application/json',
+                   'x-api-key': 'ynbWkSO7m32Mk64vd2d7NaD6VyYm8D1fH18A01O9'}
 
-class Apimethods:
+
+class APIMethodsLib:
     """
-    The post method is used to send POST API request to the API gateway hosted on AWS cloud.
+    The post method is used to send POST API requests to the API gateway hosted on AWS cloud.
     Input parameters are as follows:
     1. url: The url to which API requests are sent.
     2. json_val = the data that must be sent in the post body
@@ -26,7 +27,8 @@ class Apimethods:
     Output:
     response: JSON response for the API request.
     """
-    def post(self, url, json_val=None, params=None, files=None, headers=None):
+
+    def post(url, json_val=None, params=None, files=None, headers=None):
         if headers is None:
             headers = default_headers
         if files is None:
@@ -51,4 +53,3 @@ class Apimethods:
             headers = default_headers
         response = requests.request("GET", url, params=params, headers=headers, verify=True)
         return response
-

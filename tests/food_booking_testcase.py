@@ -1,5 +1,4 @@
-__author__ = 'Sahana Pandurangi Raghavendra'
-__author__ = 'Megana Reddy Boddam'
+__author__ = 'Sahana Pandurangi Raghavendra',  'Megana Reddy Boddam'
 
 import unittest
 from food_booking_lib import *
