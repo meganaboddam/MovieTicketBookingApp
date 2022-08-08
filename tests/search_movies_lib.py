@@ -1,13 +1,13 @@
 __author__ = 'Sahana Pandurangi Raghavendra', 'Megana Reddy Boddam'
 
 from requests import post
-from apimethodslib import *
+from api_methods_lib import *
 
 
 class SearchMovies:
 
     def __init__(self):
-        self.methods_api = APIMethodsLib()
+        self.methods_api = Apimethods()
 
     def get_user(self, request_url, params=None, headers=None):
         print("Getting the user details")
@@ -19,7 +19,7 @@ class SearchMovies:
 
     def post_user(self, request_url, params=None, headers=None):
         print("Posting the user details city")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         logging.Logger(response_json)
@@ -35,7 +35,7 @@ class SearchMovies:
 
     def post_city(self, request_url, params=None, headers=None):
         print("Posting the selected city")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         logging.Logger(response_json)
@@ -51,7 +51,7 @@ class SearchMovies:
 
     def post_theater(self, request_url, params=None, headers=None):
         print("Posting the selected theater")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         logging.Logger(response_json)
@@ -67,7 +67,7 @@ class SearchMovies:
 
     def post_movie(self, request_url, params=None, headers=None):
         print("Posting the selected movie")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         logging.Logger(response_json)

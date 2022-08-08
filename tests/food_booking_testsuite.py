@@ -10,12 +10,12 @@ def suite():
     testcases = [
         "get_list_of_food_positive_test_one",
         "get_list_of_food_negative_test_one",
+        "get_list_of_food_negative_test_two",
+        "get_list_of_food_negative_test_three",
         "post_selected_food_positive_test_one",
         "post_selected_food_negative_test_one",
-        "get_list_of_pickup_times_positive_test_one",
-        "get_list_of_pickup_times_negative_test_one",
-        "post_selected_pickup_time_positive_test_one",
-        "post_selected_pickup_time_negative_test_one"
+        "post_selected_food_negative_test_two",
+        "post_selected_food_negative_test_three"
     ]
     for i in range(len(testcases)):
         suite.addTest(FoodBookingTestcases(testcases[i]))

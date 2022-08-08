@@ -2,13 +2,13 @@ __author__ = 'Sahana Pandurangi Raghavendra'
 __author__ = 'Megana Reddy Boddam'
 
 # importing api methods file that contain the GET and POST library code
-from apimethodslib import *
+from api_methods_lib import *
 
 # Class that implements all libraries to test the API ends pertaining Payment Processing lambda service
 class PaymentProcessing:
 
     def __init__(self):
-        self.methods_api = APIMethodsLib()
+        self.methods_api = Apimethods()
 
     # Function to test the API that posts booking cost back to the backend
     # input :
@@ -18,7 +18,7 @@ class PaymentProcessing:
     #output : status code and api response in json format
     def post_booking_cost(self, request_url, params=None, headers=None):
         print("Posting the booking cost")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         print(response_json)

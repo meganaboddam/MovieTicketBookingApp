@@ -1,18 +1,16 @@
 __author__ = 'Sahana Pandurangi Raghavendra', 'Megana Reddy Boddam'
 
 # importing api methods file that contain the GET and POST library code
-from requests import post
-
-from apimethodslib import *
+from api_methods_lib import *
 
 
-# Class that implements all libraries to test the API ends pertaining Food booking lambda service
+# Class that implements all libraries to test the API ends pertaining Foodbooking lambda service
 class FoodBooking:
 
     def __init__(self):
-        self.methods_api = APIMethodsLib()
+        self.methods_api = Apimethods()
 
-    # Function to test the API that queries the database for a list available
+    # Function to test the API that queries the database for a list avaliable
     # food items for consumption during movie
     # input : url / api endpoint to which request has to be sent
     # params: query string parameters that has to be sent with the API request
@@ -31,32 +29,7 @@ class FoodBooking:
     # headers: headers that need to be added for that API
     def post_food(self, request_url, params=None, headers=None):
         print("Posting the selected food and beverages")
-        response = post(request_url, params=params, headers=headers)
-        status_code = response.status_code
-        response_json = response.json()
-        print(response_json)
-        return status_code, response_json
-
-    # Function to test the API that queries for the list of available
-    # times for picking up the food/beverages before movie
-    # input : url / api endpoint to which request has to be sent
-    # params: query string parameters that has to be sent with the API request
-    # headers: headers that need to be added for that API
-    def get_pickup_times(self, request_url, params=None, headers=None):
-        print("Getting the list of available times for picking up the food/beverages before movie")
-        response = self.methods_api.get(request_url, params=params, headers=headers)
-        status_code = response.status_code
-        response_json = response.json()
-        print(response_json)
-        return status_code, response_json
-
-    # Function to test the API that posts the selected time for picking up food.
-    # input : url / api endpoint to which request has to be sent
-    # params: query string parameters that has to be sent with the API request
-    # headers: headers that need to be added for that API
-    def post_pickup_times(self, request_url, params=None, headers=None):
-        print("Posting the selected time for picking up food")
-        response = post(request_url, params=params, headers=headers)
+        response = self.methods_api.post(request_url, params=params, headers=headers)
         status_code = response.status_code
         response_json = response.json()
         print(response_json)
